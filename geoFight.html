@@ -72,7 +72,7 @@ function preload(){
 
     this.load.image('theater', 'assets/locations/movieTheater.avif');
     this.load.image('pacificRim', 'assets/locations/pacificRim.jpeg');
-    this.load.image('pinballpete', 'assets/locations/pinballPete.webp');
+    this.load.image('pinballpete', 'assets/locations/pinball2.jpeg');
     this.load.image('sharetea', 'assets/locations/sharetea.jpeg');
     this.load.image('tasteKitchen', 'assets/locations/tasteKitchen.jpeg');
     this.load.image('union', 'assets/locations/union.avif');
@@ -289,7 +289,7 @@ function nextQuestion(){
         q = ["Pinball", "Pete", "B Dubs", "", "Zap Zone", "", "Art", "Museum", "North", "Campus", "Library", ""];
         a.answer = true;
         question.setTexture('pinballpete');
-        question.setScale(1);
+        question.setScale(0.6);
     }
     if(totalCorrect == 3){
         q = ["Tomokun", "", "No Thai", "", "Slurping", "Turtle", "Lan City", "", "Miss Kim", "", "Sharetea", ""];
