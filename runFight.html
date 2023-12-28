@@ -57,6 +57,9 @@ var walls;
 var runLeft = true;
 var wantCenter = true;
 
+var leftWasDown = false;
+var rightWasDown = false;
+
 var hurt;
 
 var playerLost2 = false;
@@ -220,50 +223,20 @@ function update(time, delta){
         window.open('','_self').close()
     }
 
-
-    // if(basket.x == 1300){
-    //     if (cursors.right.isDown){
-    //         basket.x = 1550;
-    //         wantCenter = true;
-    //     }
-    // }
-    // else if(wantCenter && basket.x == 1550){
-    //     if (cursors.right.isDown){
-    //         basket.x = 1800;
-    //         wantCenter = false;
-    //     }
-    //     else if(cursors.left.isDown){
-    //         basket.x = 1300;
-    //         wantCenter = false;
-    //     }
-    // }
-    // else if(basket.x == 1800){
-    //     if (cursors.left.isDown){
-    //         basket.x = 1550;
-    //         wantCenter = true;
-    //     }
-    // }
-
-    // // if (cursors.left.isDown){
-    // //     basket.x -= move;
-    // // }
-    // // else if (cursors.right.isDown){
-    // //     basket.x += move;
-    // // }
-
-    if (cursors.left.isDown){
-        // basket.setVelocityX(basketSpeed * -1);
-        basket.x = 1300;
+    if(cursors.left.isDown){
+        leftWasDown = true;
     }
-    else if (cursors.up.isDown){
-        basket.x = 1550;
+    else if(cursors.right.isDown){
+        rightWasDown = true;
     }
-    else if (cursors.right.isDown){
-        // basket.setVelocityX(basketSpeed);
-        basket.x = 1800;
+
+    if(leftWasDown && cursors.left.isUp && basket.x > 1300){
+        basket.x -= 250;
+        leftWasDown = false;
     }
-    else{
-        basket.setVelocityX(0);
+    if(rightWasDown && cursors.right.isUp && basket.x < 1800){
+        basket.x += 250;
+        rightWasDown = false;
     }
 
     stars.setVelocityY(starSpeed);

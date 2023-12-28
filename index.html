@@ -44,6 +44,14 @@ var ponponcrab, hereditary, bracelet, pearl, boba, eeaao;
 var envelope;
 
 var me;
+var heart;
+var heartCount = 0;
+var heartCountText;
+var heartBounce;
+var wasDown = false;
+var collect;
+var heartWalls;
+var heartPlatforms;
 
 var game = new Phaser.Game(config);
 
@@ -57,8 +65,10 @@ function preload(){
     this.load.spritesheet('items', 'assets/items.png', { frameWidth: 186, frameHeight: 175 });
     this.load.spritesheet('rollGuy', 'assets/rollGuy.png', { frameWidth: 490, frameHeight: 495 });
     this.load.image('envelope', 'assets/envelope.png');
+    this.load.image('heart', 'assets/heart.png');
 
     this.load.audio('bgMusic', ["assets/sound/roomMusic.mp3"]);
+    this.load.audio('collect', ["assets/sound/collect.mp3"]);
 }
 
 function create(){
@@ -125,10 +135,6 @@ function create(){
         repeat: -1
     });
 
-    
-
-    text = this.add.text(425, 1400, '', { fontSize: '64px', fill: '#000' });
-
     this.physics.add.collider(player, walls);
     this.physics.add.collider(player, platforms);
 
@@ -148,8 +154,30 @@ function create(){
     bgMusic = this.sound.add("bgMusic", { loop: true });
     bgMusic.play();
 
-    // title page
+    // heart stuff
+    heartWalls = this.physics.add.staticGroup();
+    heartWalls.create(200, 700, 'wall').setScale(3).setAlpha(0).refreshBody();
+    heartWalls.create(2290, 700, 'wall').setScale(3).setAlpha(0).refreshBody();
 
+    heartPlatforms = this.physics.add.staticGroup();
+    heartPlatforms.create(1200, 1350, 'ground').setScale(5).setAlpha(0).refreshBody();
+    heartPlatforms.create(1200, -20, 'ground').setScale(5).setAlpha(0).refreshBody();
+
+    heart = this.physics.add.sprite(1300, 850, 'heart');
+    heart.disableBody(true, true);
+
+    this.physics.add.collider(heart, heartWalls);
+    this.physics.add.collider(heart, heartPlatforms);
+
+    this.physics.add.sprite(125, 1450, 'heart');
+    heartCountText = this.add.text(200, 1425, 'x' + heartCount, { fontSize: '64px', fill: '#000' });
+
+    this.physics.add.overlap(player, heart, playerHeart, null, this);
+
+    text = this.add.text(425, 1400, '', { fontSize: '64px', fill: '#000' });
+    collect = this.sound.add('collect');
+
+    // title page
     title = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'title').setInteractive();
     title.setScale(scale).setScrollFactor(0);
     titleText = this.add.text(1350, 1350, 'Click screen to start.', { fontSize: '64px', fill: '#000' });
@@ -173,6 +201,46 @@ function update(){
         if (touching && !wasTouching) sprite.emit("overlapstart");
         if ((!touching && wasTouching) || collected) sprite.emit("overlapend");
     }, this);
+
+    if (cursors.shift.isDown){
+        wasDown = true;
+    }
+    if(wasDown && cursors.shift.isUp){
+        wasDown = false;
+        heart.enableBody(true, Math.floor((player.x + me.x) / 2), Math.floor((player.y + me.y) / 2), true, true);
+        heart.setDepth(5);
+        heart.setScale(0.75);
+        heart.setBounce(1);
+        heart.setVelocity(800);
+        
+        // heartBounce = this.tweens.addCounter({
+        //     from: 0,
+        //     to: 30,
+        //     duration: 10000,
+        //     onUpdate: function (tween)
+        //     {
+        //         const value = Math.floor(tween.getValue());
+        //         if(value % 2 == 0){
+        //             heart.y += 1;
+        //         }
+        //         else{
+        //             heart.y -= 1;
+        //         }
+        //         if(value == 30){
+        //             heart.disableBody(true, true);
+        //             // heartBounce.restart();
+        //         }
+        //     }
+        // });
+        
+    }
+}
+
+function playerHeart(player, heart){
+    collect.play();
+    heartCount++;
+    heartCountText.setText("x" + heartCount);
+    heart.disableBody(true, true);
 }
 
 function playerMove(){
@@ -259,7 +327,6 @@ function collectItem(player, item){
     else{
         collected = false;
     }
-    // call whatever function needed
 }
 
 </script>
