@@ -1,7 +1,6 @@
 ## Chess Puzzle Credits  
   
 **By:** Gordon Chen (my brother)  
-  
 **Solutions:**  
 1. C7  
 2. B4  
