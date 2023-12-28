@@ -57,6 +57,9 @@ var message;
 
 var hurt;
 
+var playerLost2 = false;
+var playerWon2 = false;
+
 var game = new Phaser.Game(config);
 
 function preload(){
@@ -66,7 +69,7 @@ function preload(){
     this.load.image('heart', 'assets/heart.png');
     this.load.image('button', 'assets/button.png');
     this.load.image('boss', 'assets/bosses/ponponcrab.png');
-    this.load.image('bossName', 'assets/bosses/ponponcrab.png');
+    this.load.image('bossName', 'assets/bosses/ponponcrabTitle.png');
     this.load.image('win', 'assets/bosses/win.png');
     this.load.image('lose', 'assets/bosses/lose.png');
 
@@ -79,6 +82,8 @@ function preload(){
 
     this.load.audio('hurt', ["assets/sound/hurt.mp3"]);
     this.load.audio('bgMusic', ["assets/sound/triviaMusic.mp3"]);
+    this.load.audio('failure', ["assets/sound/failure.mp3"]);
+    this.load.audio('victory', ["assets/sound/victory.mp3"]);
 }
 
 function create(){
@@ -121,12 +126,6 @@ function create(){
 
     message = this.add.text(1175, 750, 'Where is this?', { fontSize: '64px', fill: '#000' });
     message.setDepth(5);
-
-    // buttons = this.physics.add.group({
-    //     key: 'button',
-    //     repeat: 2,
-    //     setXY: { x: 1200, y: 950, stepX: 300 }
-    // });
 
     textA = this.add.text(1100, 910, 'North', { fontSize: '45px', fill: '#000' });
     textA2 = this.add.text(1100, 970, 'Campus', { fontSize: '45px', fill: '#000' });
@@ -237,9 +236,12 @@ function update(time, delta){
         win.setScale(scale).setScrollFactor(0);
         win.setDepth(1);
         this.physics.pause();
-        if (cursors.space.isDown){
-            window.open('','_self').close()
-        }
+        fade.stop();
+        playerWon = false;
+        playerWon2 = true;
+        bgMusic.stop();
+        bgMusic = this.sound.add("victory", { loop: true });
+        bgMusic.play();
         return;
     }
     if (playerLost){
@@ -253,24 +255,22 @@ function update(time, delta){
         lose.setScale(scale).setScrollFactor(0);
         lose.setDepth(1);
         this.physics.pause();
-        if (cursors.space.isDown){
-            location.reload();
-        }
+        fade.stop();
+        playerLost = false;
+        playerLost2 = true;
+        bgMusic.stop();
+        bgMusic = this.sound.add("failure", { loop: true });
+        bgMusic.play();
         return;
     }
-    // timer += delta;
-    // while (timer > gap) {
-    //     timer -= gap;
-    //     growRed();
-    //     console.log("red");
-    // }
+    if (playerLost2 && cursors.space.isDown){
+        location.reload();
+    }
+    if (playerWon2 && cursors.space.isDown){
+        window.open('','_self').close()
+    }
 }
 
-// function growRed(){
-//     console.log("red");
-//     redLevel++;
-//     question.setTint(Phaser.Display.Color.GetColor(redLevel, 0, 0));
-// }
 
 function nextQuestion(){
     fade.restart();

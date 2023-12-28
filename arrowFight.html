@@ -46,6 +46,11 @@ var bossName;
 
 var hurt;
 
+var playerLost2 = false;
+var playerWon2 = false;
+
+var bossHp;
+
 var game = new Phaser.Game(config);
 
 function preload(){
@@ -62,6 +67,8 @@ function preload(){
 
     this.load.audio('hurt', ["assets/sound/hurt.mp3"]);
     this.load.audio('bgMusic', ["assets/sound/fightMusic.mp3"]);
+    this.load.audio('failure', ["assets/sound/failure.mp3"]);
+    this.load.audio('victory', ["assets/sound/victory.mp3"]);
 }
 
 function create(){
@@ -104,28 +111,6 @@ function create(){
     this.physics.add.overlap(baseArrows, arrows, hitArrow, null, this);
     this.physics.add.overlap(ground, arrows, playerHurt, null, this);
 
-    // let logo = this.add.sprite(250, 250, 'arrows');
-
-    //   let graphics = this.add.graphics({
-    //     x: logo.x - logo.width / 2,
-    //     y: logo.y - logo.height / 2
-    //   })
-    //   .fillStyle(0xffff00, 0.75)
-    //   .fillRect(0, 0, logo.width, logo.height)
-
-    //   this.tweens.add({
-    //     targets: graphics,
-    //     alpha: 0,
-    //     ease: 'Cubic.easeOut',  
-    //     duration: 500,
-    //     repeat: -1,
-    //     yoyo: true
-    //   })
-
-    // this.add.tween(baseArrows).to({
-    //     tint: 0xffffff,
-    // }, 100, Phaser.Easing.Exponential.Out, true, 0, 0, true);
-
     hearts = this.physics.add.group({
         key: 'heart',
         repeat: fullPlayerHealth - 1,
@@ -133,9 +118,12 @@ function create(){
     });
     hearts.setDepth(2);
 
+    bossHp = this.add.text(250, 100, 'HP:' + bossHealth, { fontSize: '64px', fill: '#000' }).setDepth(12);
+
 }
 
 function update(time, delta){
+    bossHp.setText('HP:' + bossHealth);
     if (playerWon){
         boss.setTint(0xFF0000);
         text = this.add.text(600, 15, 'Press SPACE to return.', { fontSize: '64px', fill: '#000' });
@@ -148,9 +136,11 @@ function update(time, delta){
         win.setScale(scale).setScrollFactor(0);
         win.setDepth(1);
         this.physics.pause();
-        if (cursors.space.isDown){
-            window.open('','_self').close()
-        }
+        playerWon = false;
+        playerWon2 = true;
+        bgMusic.stop();
+        bgMusic = this.sound.add("victory", { loop: true });
+        bgMusic.play();
         return;
     }
     if (playerLost){
@@ -164,10 +154,18 @@ function update(time, delta){
         lose.setScale(scale).setScrollFactor(0);
         lose.setDepth(1);
         this.physics.pause();
-        if (cursors.space.isDown){
-            location.reload();
-        }
+        playerLost = false;
+        playerLost2 = true;
+        bgMusic.stop();
+        bgMusic = this.sound.add("failure", { loop: true });
+        bgMusic.play();
         return;
+    }
+    if (playerLost2 && cursors.space.isDown){
+        location.reload();
+    }
+    if (playerWon2 && cursors.space.isDown){
+        window.open('','_self').close()
     }
 
     arrows.setVelocityY(arrowSpeed);
@@ -183,7 +181,6 @@ function playerHurt(ground, arrow){
     var playerHearts = hearts.getChildren();
     playerHearts[playerHealth - 1].disableBody(true, true);
 
-    // arrow.disableBody(true, true);
     arrow.destroy();
     playerHealth--;
     if(playerHealth < 1){
@@ -243,7 +240,6 @@ function hitArrow(baseArrows, arrow){
     }
 
     if(accurateHit){
-        // arrow.disableBody(true, true);
         arrow.destroy();
         bossHealth--;
 

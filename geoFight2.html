@@ -57,6 +57,9 @@ var message;
 
 var hurt;
 
+var playerLost2 = false;
+var playerWon2 = false;
+
 var game = new Phaser.Game(config);
 
 function preload(){
@@ -70,7 +73,7 @@ function preload(){
     this.load.image('win', 'assets/bosses/win.png');
     this.load.image('lose', 'assets/bosses/lose.png');
 
-    this.load.image('mud', 'assets/me/mud.jpg');
+    this.load.image('mud', 'assets/me/mud.jpeg');
     this.load.image('name', 'assets/me/name.jpeg');
     this.load.image('taishan', 'assets/me/taishan.png');
     this.load.image('taro', 'assets/me/taro.jpg');
@@ -79,6 +82,8 @@ function preload(){
 
     this.load.audio('hurt', ["assets/sound/hurt.mp3"]);
     this.load.audio('bgMusic', ["assets/sound/triviaMusic.mp3"]);
+    this.load.audio('failure', ["assets/sound/failure.mp3"]);
+    this.load.audio('victory', ["assets/sound/victory.mp3"]);
 }
 
 function create(){
@@ -188,7 +193,7 @@ function create(){
     fade = this.tweens.addCounter({
         from: 0,
         to: 255,
-        duration: 10000,
+        duration: 5000,
         onUpdate: function (tween)
         {
             const value = Math.floor(tween.getValue());
@@ -237,9 +242,12 @@ function update(time, delta){
         win.setScale(scale).setScrollFactor(0);
         win.setDepth(1);
         this.physics.pause();
-        if (cursors.space.isDown){
-            window.open('','_self').close()
-        }
+        fade.stop();
+        playerWon = false;
+        playerWon2 = true;
+        bgMusic.stop();
+        bgMusic = this.sound.add("victory", { loop: true });
+        bgMusic.play();
         return;
     }
     if (playerLost){
@@ -253,17 +261,20 @@ function update(time, delta){
         lose.setScale(scale).setScrollFactor(0);
         lose.setDepth(1);
         this.physics.pause();
-        if (cursors.space.isDown){
-            location.reload();
-        }
+        fade.stop();
+        playerLost = false;
+        playerLost2 = true;
+        bgMusic.stop();
+        bgMusic = this.sound.add("failure", { loop: true });
+        bgMusic.play();
         return;
     }
-    // timer += delta;
-    // while (timer > gap) {
-    //     timer -= gap;
-    //     growRed();
-    //     console.log("red");
-    // }
+    if (playerLost2 && cursors.space.isDown){
+        location.reload();
+    }
+    if (playerWon2 && cursors.space.isDown){
+        window.open('','_self').close()
+    }
 }
 
 // function growRed(){
@@ -312,7 +323,7 @@ function nextQuestion(){
         q = ["mudz", "", "mad", "", "moodz", "", "mads", "", "mandy", "", "muds", ""];
         f.answer = true;
         question.setTexture('mud');
-        question.setScale(0.75);
+        question.setScale(0.5);
     }
 
     textA.setText(q[0]);

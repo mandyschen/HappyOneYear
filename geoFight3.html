@@ -62,6 +62,9 @@ var message;
 
 var hurt;
 
+var playerLost2 = false;
+var playerWon2 = false;
+
 var game = new Phaser.Game(config);
 
 function preload(){
@@ -86,6 +89,8 @@ function preload(){
 
     this.load.audio('hurt', ["assets/sound/hurt.mp3"]);
     this.load.audio('bgMusic', ["assets/sound/triviaMusic.mp3"]);
+    this.load.audio('failure', ["assets/sound/failure.mp3"]);
+    this.load.audio('victory', ["assets/sound/victory.mp3"]);
 }
 
 function create(){
@@ -279,9 +284,12 @@ function update(time, delta){
         win.setScale(scale).setScrollFactor(0);
         win.setDepth(1);
         this.physics.pause();
-        if (cursors.space.isDown){
-            window.open('','_self').close()
-        }
+        fade.stop();
+        playerWon = false;
+        playerWon2 = true;
+        bgMusic.stop();
+        bgMusic = this.sound.add("victory", { loop: true });
+        bgMusic.play();
         return;
     }
     if (playerLost){
@@ -295,10 +303,19 @@ function update(time, delta){
         lose.setScale(scale).setScrollFactor(0);
         lose.setDepth(1);
         this.physics.pause();
-        if (cursors.space.isDown){
-            location.reload();
-        }
+        fade.stop();
+        playerLost = false;
+        playerLost2 = true;
+        bgMusic.stop();
+        bgMusic = this.sound.add("failure", { loop: true });
+        bgMusic.play();
         return;
+    }
+    if (playerLost2 && cursors.space.isDown){
+        location.reload();
+    }
+    if (playerWon2 && cursors.space.isDown){
+        window.open('','_self').close()
     }
 }
 

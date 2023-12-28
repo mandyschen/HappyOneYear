@@ -59,6 +59,11 @@ var wantCenter = true;
 
 var hurt;
 
+var playerLost2 = false;
+var playerWon2 = false;
+
+var bossHp;
+
 var game = new Phaser.Game(config);
 
 function preload(){
@@ -80,6 +85,8 @@ function preload(){
 
     this.load.audio('hurt', ["assets/sound/hurt.mp3"]);
     this.load.audio('bgMusic', ["assets/sound/fightMusic.mp3"]);
+    this.load.audio('failure', ["assets/sound/failure.mp3"]);
+    this.load.audio('victory', ["assets/sound/victory.mp3"]);
 }
 
 function create(){
@@ -155,6 +162,7 @@ function create(){
     });
     hearts.setDepth(12);
 
+    bossHp = this.add.text(250, 100, 'HP:' + bossHealth, { fontSize: '64px', fill: '#000' }).setDepth(12);
 
 }
 
@@ -167,6 +175,7 @@ function destroyBomb(ground, bomb){
 }
 
 function update(time, delta){
+    bossHp.setText('HP:' + bossHealth);
     if (playerWon){
         boss.setTint(0xFF0000);
         text = this.add.text(600, 15, 'Press SPACE to return.', { fontSize: '64px', fill: '#000' });
@@ -179,9 +188,11 @@ function update(time, delta){
         win.setScale(scale).setScrollFactor(0);
         win.setDepth(12);
         this.physics.pause();
-        if (cursors.space.isDown){
-            window.open('','_self').close()
-        }
+        playerWon = false;
+        playerWon2 = true;
+        bgMusic.stop();
+        bgMusic = this.sound.add("victory", { loop: true });
+        bgMusic.play();
         return;
     }
     if (playerLost){
@@ -195,10 +206,18 @@ function update(time, delta){
         lose.setScale(scale).setScrollFactor(0);
         lose.setDepth(12);
         this.physics.pause();
-        if (cursors.space.isDown){
-            location.reload();
-        }
+        playerLost = false;
+        playerLost2 = true;
+        bgMusic.stop();
+        bgMusic = this.sound.add("failure", { loop: true });
+        bgMusic.play();
         return;
+    }
+    if (playerLost2 && cursors.space.isDown){
+        location.reload();
+    }
+    if (playerWon2 && cursors.space.isDown){
+        window.open('','_self').close()
     }
 
 
