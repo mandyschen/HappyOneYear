@@ -1,15 +1,3 @@
-<!doctype html> 
-<html lang="en"> 
-<head> 
-    <meta charset="UTF-8" />
-    <title>Arrow Hero</title>
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<script type="text/javascript">
-
 var config = {
     type: Phaser.AUTO,
     width: 2224,
@@ -271,8 +259,3 @@ function hitArrow(baseArrows, arrow){
         playerWon = true;
     }
 }
-
-</script>
-
-</body>
-</html>

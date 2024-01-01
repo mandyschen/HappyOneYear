@@ -1,14 +1,3 @@
-<!doctype html> 
-<html lang="en"> 
-<head> 
-    <meta charset="UTF-8" />
-    <title>RunRunPurin</title>
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<script type="text/javascript">
 
 var config = {
     type: Phaser.AUTO,
@@ -363,10 +352,3 @@ function hitBomb(basket, bomb){
     // bomb.destroy();
     playerHurt(basket, bomb);
 }
-
-
-
-</script>
-
-</body>
-</html>

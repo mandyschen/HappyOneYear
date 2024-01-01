@@ -1,14 +1,3 @@
-<!doctype html> 
-<html lang="en"> 
-<head> 
-    <meta charset="UTF-8" />
-    <title>Trivia: Dates</title>
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<script type="text/javascript">
 
 var config = {
     type: Phaser.AUTO,
@@ -68,17 +57,17 @@ function preload(){
     this.load.image('frame', 'assets/locations/frame.png');
     this.load.image('heart', 'assets/heart.png');
     this.load.image('button', 'assets/button.png');
-    this.load.image('boss', 'assets/bosses/ponponcrab.png');
-    this.load.image('bossName', 'assets/bosses/ponponcrabTitle.png');
+    this.load.image('boss', 'assets/bosses/pinballPete.png');
+    this.load.image('bossName', 'assets/bosses/pinballPeteTitle.png');
     this.load.image('win', 'assets/bosses/win.png');
     this.load.image('lose', 'assets/bosses/lose.png');
 
-    this.load.image('theater', 'assets/locations/movieTheater.avif');
-    this.load.image('pacificRim', 'assets/locations/pacificRim.jpeg');
-    this.load.image('pinballpete', 'assets/locations/pinball2.jpeg');
-    this.load.image('sharetea', 'assets/locations/sharetea.jpeg');
-    this.load.image('tasteKitchen', 'assets/locations/tasteKitchen.jpeg');
-    this.load.image('union', 'assets/locations/union.avif');
+    this.load.image('mud', 'assets/me/mud.jpeg');
+    this.load.image('name', 'assets/me/name.jpeg');
+    this.load.image('taishan', 'assets/me/taishan.png');
+    this.load.image('taro', 'assets/me/taro.jpg');
+    this.load.image('two', 'assets/me/double.jpeg');
+    this.load.image('waterDrop', 'assets/me/waterDrop.png');
 
     this.load.audio('hurt', ["assets/sound/hurt.mp3"]);
     this.load.audio('bgMusic', ["assets/sound/triviaMusic.mp3"]);
@@ -122,37 +111,43 @@ function create(){
     });
     hearts.setDepth(2);
 
-    question = this.add.image(1550, 400, 'theater');
+    question = this.add.image(1550, 400, 'waterDrop');
 
-    message = this.add.text(1175, 750, 'Where is this?', { fontSize: '64px', fill: '#000' });
+    message = this.add.text(1175, 750, 'What is my favorite color?', { fontSize: '40px', fill: '#000' });
     message.setDepth(5);
 
-    textA = this.add.text(1100, 910, 'North', { fontSize: '45px', fill: '#000' });
-    textA2 = this.add.text(1100, 970, 'Campus', { fontSize: '45px', fill: '#000' });
+    // buttons = this.physics.add.group({
+    //     key: 'button',
+    //     repeat: 2,
+    //     setXY: { x: 1200, y: 950, stepX: 300 }
+    // });
+
+    textA = this.add.text(1100, 910, 'Light', { fontSize: '45px', fill: '#000' });
+    textA2 = this.add.text(1100, 970, 'Blue', { fontSize: '45px', fill: '#000' });
     textA.setDepth(4);
     textA2.setDepth(4);
 
-    textB = this.add.text(1400, 910, 'Movie', { fontSize: '45px', fill: '#000' });
-    textB2 = this.add.text(1400, 970, 'Theater', { fontSize: '45px', fill: '#000' });
+    textB = this.add.text(1400, 910, 'Red', { fontSize: '45px', fill: '#000' });
+    textB2 = this.add.text(1400, 970, '', { fontSize: '45px', fill: '#000' });
     textB.setDepth(4);
     textB2.setDepth(4);
 
-    textC = this.add.text(1700, 910, 'Union', { fontSize: '45px', fill: '#000' });
-    textC2 = this.add.text(1700, 970, '', { fontSize: '45px', fill: '#000' });
+    textC = this.add.text(1700, 910, 'Neon', { fontSize: '45px', fill: '#000' });
+    textC2 = this.add.text(1700, 970, 'Green', { fontSize: '45px', fill: '#000' });
     textC.setDepth(4);
     textC2.setDepth(4);
 
-    textD = this.add.text(1100, 1110, 'Boba', { fontSize: '45px', fill: '#000' });
-    textD2 = this.add.text(1100, 1170, 'Shop', { fontSize: '45px', fill: '#000' });
+    textD = this.add.text(1100, 1110, 'Yellow', { fontSize: '45px', fill: '#000' });
+    textD2 = this.add.text(1100, 1170, '', { fontSize: '45px', fill: '#000' });
     textD.setDepth(4);
     textD2.setDepth(4);
 
-    textE = this.add.text(1400, 1110, 'Target', { fontSize: '45px', fill: '#000' });
+    textE = this.add.text(1400, 1110, 'Magenta', { fontSize: '45px', fill: '#000' });
     textE2 = this.add.text(1400, 1170, '', { fontSize: '45px', fill: '#000' });
     textE.setDepth(4);
     textE2.setDepth(4);
 
-    textF = this.add.text(1700, 1110, 'Library', { fontSize: '45px', fill: '#000' });
+    textF = this.add.text(1700, 1110, 'Indigo', { fontSize: '45px', fill: '#000' });
     textF2 = this.add.text(1700, 1170, '', { fontSize: '45px', fill: '#000' });
     textF.setDepth(4);
     textF2.setDepth(4);
@@ -182,12 +177,12 @@ function create(){
     clickedButton(sprite);
     }, this);
 
-    b.answer = true;
+    a.answer = true;
 
     fade = this.tweens.addCounter({
         from: 0,
         to: 255,
-        duration: 10000,
+        duration: 5000,
         onUpdate: function (tween)
         {
             const value = Math.floor(tween.getValue());
@@ -271,7 +266,6 @@ function update(time, delta){
     }
 }
 
-
 function nextQuestion(){
     fade.restart();
 
@@ -280,33 +274,38 @@ function nextQuestion(){
     }, this);
 
     if(totalCorrect == 1){
-        q = ["Of Mice", "and Men", "Taste", "Kitchen", "Miss Kim", "", "Pacific", "Rim", "Aventura", "", "Tomokun", ""];
-        d.answer = true;
-        question.setTexture('pacificRim');
-        question.setScale(2);
+        message.setText("What is my middle name?");
+        q = ["Mary", "", "She Min", "", "Jane", "", "Bob", "", "Ella", "", "Shu Min", ""];
+        f.answer = true;
+        question.setTexture('name');
+        question.setScale(1);
     }
     if(totalCorrect == 2){
-        q = ["Pinball", "Pete", "B Dubs", "", "Zap Zone", "", "Art", "Museum", "North", "Campus", "Library", ""];
-        a.answer = true;
-        question.setTexture('pinballpete');
-        question.setScale(0.6);
+        message.setText("What is my boba order?");
+        q = ["Kiwi", "Lime", "Honey", "Melon", "Taro", "", "Brown", "Sugar", "Mango", "", "Green", "Tea"];
+        c.answer = true;
+        question.setTexture('taro');
+        question.setScale(0.5);
     }
     if(totalCorrect == 3){
-        q = ["Tomokun", "", "No Thai", "", "Slurping", "Turtle", "Lan City", "", "Miss Kim", "", "Sharetea", ""];
-        f.answer = true;
-        question.setTexture('sharetea');
-        question.setScale(0.3);
+        message.setText("How many siblings do I have?");
+        q = ["1", "", "2", "", "3", "", "4", "", "5", "", "6", ""];
+        b.answer = true;
+        question.setTexture('two');
+        question.setScale(0.75);
     }
     if(totalCorrect == 4){
-        q = ["Slurping", "Turtle", "Tomokun", "", "Pacific", "Rim", "Taste", "Kitchen", "Aventura", "", "Lan City", ""];
-        d.answer = true;
-        question.setTexture('tasteKitchen');
-        question.setScale(0.6);
+        message.setText("Where is my family from?");
+        q = ["Taiwan", "", "Shanghai", "", "Taishan", "", "Beijing", "", "England", "", "Hongkong", ""];
+        c.answer = true;
+        question.setTexture('taishan');
+        question.setScale(2);
     }
     if(totalCorrect == 5){
-        q = ["Library", "", "North", "Campus", "Theater", "", "Art", "Museum", "Union", "", "Ross", "School"];
-        e.answer = true;
-        question.setTexture('union');
+        message.setText("What is my Game Pigeon name?");
+        q = ["mudz", "", "mad", "", "moodz", "", "mads", "", "mandy", "", "muds", ""];
+        f.answer = true;
+        question.setTexture('mud');
         question.setScale(0.5);
     }
 
@@ -339,9 +338,3 @@ function playerHurt(){
 
     hurt.play();
 }
-
-
-</script>
-
-</body>
-</html>
